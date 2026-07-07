@@ -11,7 +11,7 @@ function required(name) {
 export const env = {
   port: process.env.PORT || 3001,
   databaseUrl: required("DATABASE_URL"),
-  supabaseUrl: process.env.SUPABASE_URL || null,
-  supabaseJwtSecret: process.env.SUPABASE_JWT_SECRET || null,
+  supabaseUrl: required("SUPABASE_URL"),
+  supabaseAnonKey: required("SUPABASE_ANON_KEY"),
   corsOrigin: process.env.CORS_ORIGIN || "http://localhost:5173",
 };

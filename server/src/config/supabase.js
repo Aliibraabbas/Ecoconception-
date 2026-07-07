@@ -1,34 +1,15 @@
-import jwt from "jsonwebtoken";
-import { createRemoteJWKSet, jwtVerify } from "jose";
+import { createClient } from "@supabase/supabase-js";
 import { env } from "./env.js";
 
-const jwks = env.supabaseUrl
-  ? createRemoteJWKSet(new URL(`${env.supabaseUrl}/auth/v1/.well-known/jwks.json`))
-  : null;
+const supabaseAuthClient = createClient(env.supabaseUrl, env.supabaseAnonKey);
 
-function decodeHeader(token) {
-  const [headerB64] = token.split(".");
-  return JSON.parse(Buffer.from(headerB64, "base64").toString("utf8"));
-}
-
-// Vérifie le JWT émis par Supabase Auth : HS256 (secret partagé legacy) ou ES256/RS256 (clés JWKS, projets récents).
-export async function verifySupabaseJwt(token) {
-  const { alg } = decodeHeader(token);
-
-  if (alg === "HS256") {
-    if (!env.supabaseJwtSecret) {
-      throw new Error(
-        "SUPABASE_JWT_SECRET manquant. Renseigne-le dans server/.env (Supabase Dashboard > Project Settings > API > JWT Settings)."
-      );
-    }
-    return jwt.verify(token, env.supabaseJwtSecret, { algorithms: ["HS256"] });
+// Valide le token Supabase Auth via l'API Supabase (auth.getUser) plutôt qu'une
+// vérification JWT locale : certains projets Supabase (clés asymétriques, rotation)
+// ne sont pas fiables à vérifier manuellement en HS256/JWKS depuis le backend.
+export async function verifySupabaseToken(token) {
+  const { data, error } = await supabaseAuthClient.auth.getUser(token);
+  if (error || !data?.user) {
+    throw new Error("Token Supabase invalide ou expiré");
   }
-
-  if (!jwks) {
-    throw new Error(
-      "SUPABASE_URL manquant. Renseigne-le dans server/.env pour vérifier les JWT signés avec les clés asymétriques Supabase."
-    );
-  }
-  const { payload } = await jwtVerify(token, jwks);
-  return payload;
+  return data.user;
 }

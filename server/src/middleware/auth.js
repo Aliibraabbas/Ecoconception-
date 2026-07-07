@@ -1,4 +1,4 @@
-import { verifySupabaseJwt } from "../config/supabase.js";
+import { verifySupabaseToken } from "../config/supabase.js";
 import { UnauthorizedError } from "../utils/errors.js";
 
 export async function auth(req, res, next) {
@@ -8,8 +8,8 @@ export async function auth(req, res, next) {
     if (scheme !== "Bearer" || !token) {
       throw new UnauthorizedError("Token Bearer manquant");
     }
-    const payload = await verifySupabaseJwt(token);
-    req.user = { id: payload.sub, email: payload.email, fullName: payload.user_metadata?.full_name };
+    const user = await verifySupabaseToken(token);
+    req.user = { id: user.id, email: user.email, fullName: user.user_metadata?.full_name };
     next();
   } catch (err) {
     next(new UnauthorizedError("Token invalide ou expiré"));
