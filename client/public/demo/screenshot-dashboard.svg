@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300">
+  <rect width="480" height="300" fill="#F8FAFC" />
+  <rect width="480" height="30" fill="#FFFFFF" />
+  <circle cx="16" cy="15" r="4" fill="#EF4444" /><circle cx="30" cy="15" r="4" fill="#F59E0B" /><circle cx="44" cy="15" r="4" fill="#10B981" />
+  <text x="20" y="55" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0F172A">Tableau de bord</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="20" y="70" width="100" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="30" y="88" font-size="9" fill="#64748B">Projets actifs</text>
+    <text x="30" y="112" font-size="20" font-weight="700" fill="#0F172A">5</text>
+    <rect x="128" y="70" width="100" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="138" y="88" font-size="9" fill="#64748B">Tâches actives</text>
+    <text x="138" y="112" font-size="20" font-weight="700" fill="#0F172A">60</text>
+    <rect x="236" y="70" width="100" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="246" y="88" font-size="9" fill="#64748B">En retard</text>
+    <text x="246" y="112" font-size="20" font-weight="700" fill="#EF4444">18</text>
+    <rect x="344" y="70" width="116" height="60" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="354" y="88" font-size="9" fill="#64748B">Terminées</text>
+    <text x="354" y="112" font-size="20" font-weight="700" fill="#10B981">2</text>
+  </g>
+  <rect x="20" y="144" width="215" height="130" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+  <circle cx="127" cy="210" r="42" fill="none" stroke="#10B981" stroke-width="16" stroke-dasharray="90 190" />
+  <circle cx="127" cy="210" r="42" fill="none" stroke="#F59E0B" stroke-width="16" stroke-dasharray="60 190" stroke-dashoffset="-90" />
+  <circle cx="127" cy="210" r="42" fill="none" stroke="#64748B" stroke-width="16" stroke-dasharray="40 190" stroke-dashoffset="-150" />
+  <rect x="245" y="144" width="215" height="130" rx="8" fill="#FFFFFF" stroke="#E2E8F0" />
+  <polyline points="260,240 285,225 310,232 335,205 360,215 385,190 410,198 435,175" fill="none" stroke="#6366F1" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

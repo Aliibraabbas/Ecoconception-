@@ -1,0 +1,62 @@
+name: Terraform CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["Build & Push Docker Images"]
+    types:
+      - completed
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: 📦 Terraform Deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infra
+
+    steps:
+      - name: ⬇️ Checkout du code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::908027392248:role/deploy-terraform
+          aws-region: eu-west-1
+          audience: sts.amazonaws.com
+
+      - name: 🔍 Debug AWS identity
+        run: aws sts get-caller-identity
+
+      - name: ⛏️ Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.0
+
+      - name: 📦 Terraform Init
+        run: terraform init -reconfigure
+
+      - name: 🛠️ Retirer l'état cassé si nécessaire
+        run: |
+          set +e
+          echo "🔎 Vérification si 'app_task' existe dans le state Terraform..."
+          terraform state list | grep aws_ecs_task_definition.app_task && \
+            terraform state rm aws_ecs_task_definition.app_task || \
+            echo "✅ La task 'app_task' n'existe pas dans le state. Rien à faire."
+
+
+      - name: 🚀 Terraform Apply (full infra, update service)
+        env:
+          TF_VAR_dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+          TF_VAR_client_image_tag: v1.0.${{ github.run_number }}
+          TF_VAR_server_image_tag: v1.0.${{ github.run_number }}
+        run: terraform apply --auto-approve
+
+      - name: ✅ Afficher l'URL ALB
+        run: |
+          echo "App URL: $(terraform output -raw app_url || echo 'non disponible')"
+
