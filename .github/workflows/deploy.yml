@@ -1,9 +1,11 @@
 name: Build & Push Docker Images
 
+# Déclenchement automatique désactivé volontairement : ce workflow nécessite
+# des secrets DockerHub (DOCKERHUB_USERNAME / DOCKERHUB_TOKEN) qui ne sont pas
+# configurés pour le moment. Le workflow reste disponible en déclenchement
+# manuel (workflow_dispatch) le temps que DockerHub/AWS/Terraform soient utilisés.
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 env:
   REGISTRY: docker.io
