@@ -74,8 +74,11 @@ export default function Landing() {
           </a>
         </div>
         <img
-          src="/demo/hero-dashboard-raster.png"
+          src="/demo/hero-dashboard-raster.webp"
           alt="Aperçu du dashboard Momentum avec statistiques, graphiques et projets récents"
+          width="1920"
+          height="1120"
+          fetchpriority="high"
           className="mt-6 w-full max-w-4xl rounded-2xl border border-text-secondary/10 shadow-lg"
         />
       </section>
