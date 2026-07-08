@@ -1,4 +1,8 @@
 const ITEM_COUNT = 50000;
+const CACHE_TTL_MS = 30000;
+
+let cache = null;
+let cachedAt = 0;
 
 function generateItems(count) {
   const items = [];
@@ -13,7 +17,7 @@ function generateItems(count) {
   return items;
 }
 
-export function runBenchmark() {
+function computeBenchmark() {
   const items = generateItems(ITEM_COUNT);
 
   const filtered = items.filter((item) => item.value > 500);
@@ -29,4 +33,15 @@ export function runBenchmark() {
     totalFiltered: filtered.length,
     top5: mapped.slice(0, 5),
   };
+}
+
+export function runBenchmark() {
+  const now = Date.now();
+  if (cache && now - cachedAt < CACHE_TTL_MS) {
+    return cache;
+  }
+
+  cache = computeBenchmark();
+  cachedAt = now;
+  return cache;
 }
