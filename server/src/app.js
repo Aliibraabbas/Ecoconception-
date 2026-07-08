@@ -15,6 +15,7 @@ import activitiesRoutes from "./routes/activities.routes.js";
 import searchRoutes from "./routes/search.routes.js";
 import calendarRoutes from "./routes/calendar.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import ecoBenchmarkRoutes from "./routes/eco-benchmark.routes.js";
 
 export function createApp() {
   const app = express();
@@ -40,6 +41,7 @@ export function createApp() {
   app.use("/api/search", searchRoutes);
   app.use("/api/calendar", calendarRoutes);
   app.use("/api/dashboard", dashboardRoutes);
+  app.use("/api/eco-benchmark", ecoBenchmarkRoutes);
 
   app.use(notFound);
   app.use(errorHandler);
